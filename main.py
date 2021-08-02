@@ -24,7 +24,6 @@ def hide_bin_text_in_img(img, text):
     w, h, _ = img.shape
     print("Size of Image: ", w, h, ". Possible characters = ", w * h * 3 / 8, "Words with average length of 6: ",
           w * h * 3 / 8 / 6)
-    end = len(text)
     i = 0
     break_loop = 0
     for x in range(w):
@@ -80,7 +79,6 @@ def bits_to_text(bin_text):
         temp_data = bin_text[i:i + 8]
         decimal_data = bin_to_dec(temp_data)
         str_data = str_data + chr(decimal_data)
-    # print(str_data)
     return str_data
 
 
@@ -128,10 +126,6 @@ def load_text(path):
     return text
 
 
-path = "/home/haraldk/Desktop/doge.jpg"
-img = load_image(path)
-
-
 def test_channel_and_fix_length_to_list(c):
     c_bin = list(format(c, 'b'))
 
@@ -141,13 +135,47 @@ def test_channel_and_fix_length_to_list(c):
 
     return c_bin
 
-text = load_text('/home/haraldk/Desktop/lorem_ipsum.txt')
-print(len(text))
-bin_text = text_to_bits(text)
-bits_to_text(bin_text)
-img = hide_bin_text_in_img(img, bin_text)
-cv2.imshow("New", img)
-cv2.waitKey(0)
-print(extract_text_from_image(img, len(text)))
+
+def get_image_with_user_path():
+    print("Image path:")
+    path = input()
+    if path == '':
+        path = 'doge.jpg'
+    print("Image path =", path)
+    return load_image(path)
 
 
+def get_text_with_user_path():
+    print("(1) Textfile or (2) input or (any) default text?")
+    option = input()
+    text = ''
+
+    if option == '1':
+        print('Textfile path:')
+        text_path = input()
+        print('Textfile path =', text_path)
+        text = load_text(text_path)
+    elif option == '2':
+        print('Text:')
+        text = input()
+        print('Text =', text)
+    else:
+        print('Default lorem ipsum. ~ 15000w, 100000chars')
+        text = load_text('lorem_ipsum.txt')
+
+    return text
+
+
+def manipulate_img():
+    img = get_image_with_user_path()
+    text = get_text_with_user_path()
+    bin_text = text_to_bits(text)
+    bits_to_text(bin_text)
+    img = hide_bin_text_in_img(img, bin_text)
+    cv2.imshow("New", img)
+    cv2.imwrite('stega.jpg', img)
+    cv2.waitKey(0)
+    print(extract_text_from_image(img, len(text)))
+
+
+manipulate_img()
