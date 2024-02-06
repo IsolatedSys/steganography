@@ -128,11 +128,9 @@ def load_text(path):
 
 def test_channel_and_fix_length_to_list(c):
     c_bin = list(format(c, 'b'))
-
     if len(c_bin) < 8:
         append = '0' * (8 - len(c_bin))
         c_bin = list(append + ''.join(c_bin))
-
     return c_bin
 
 
@@ -178,4 +176,6 @@ def manipulate_img():
     print(extract_text_from_image(img, len(text)))
 
 
-manipulate_img()
+if __name__ == "__main__":
+    manipulate_img()
+    
